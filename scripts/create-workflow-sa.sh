@@ -27,7 +27,8 @@ kubectl get ns | grep -q "^${NAMESPACE} " || kubectl create ns ${NAMESPACE}
 
 echo ""
 echo "===> Creating SA ${SERVICE_ACCT} in namespace ${NAMESPACE} (if it doesn't exist) ..."
-kubectl get sa ${SERVICE_ACCT} -n ${NAMESPACE} | grep -q "^${SERVICE_ACCT} " || kubectl create sa ${SERVICE_ACCT} -n ${NAMESPACE}
+kubectl get sa ${SERVICE_ACCT} -n ${NAMESPACE} > /dev/null 2>&1
+test $? -eq 0 || kubectl create sa ${SERVICE_ACCT} -n ${NAMESPACE}
 
 echo ""
 echo "===> Applying role-workflow.yaml in namespace ${NAMESPACE} ..."

@@ -1,5 +1,9 @@
 # argo-workflow-samples
-See `docs/SETUP.md` for Argo Server setup
+A proper quickstart for Argo Workflows which gives you all you need to run a sample Workflow the correct way, in an app's namespace and using a service account that's been created specifically for running the app's `Workflow` specs.
+
+## Argo Workflows installation
+We'll to with the default `Cluster` install of Argo Workflows as described in their own docs:
+https://argoproj.github.io/argo-workflows/installation/
 
 ## Argo Server Authentication
 Below is a script put together from Argo Server's own docs: https://argoproj.github.io/argo-workflows/access-token/

@@ -29,7 +29,7 @@ Argo Server UI should be running at ClusterIP port `2746`. Run following command
 ```
 kubectl -n argo port-forward deployment/argo-server 2746:2746
 ```
-Once done, you should be able to hit the Argo Server UI at: https://localhost:2746/workflows/<namespace>
+Once done, you should be able to hit the Argo Server UI at: `https://localhost:2746/workflows/app1`
 
 ## Creating Workflows
 Although you can `kubectl apply` `Workflow` specs directly, I've found it easier to use the Argo CLI `argo submit` to do the same.

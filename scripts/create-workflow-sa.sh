@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if ! command -v envsubst &> /dev/null
+then
+  echo "ERROR: envsubst isn't installed/can't be found. Get it installed on your machine before proceeding. https://www.google.com/search?q=envsubst+command+not+found"
+  exit 2
+fi
+
 export NAMESPACE=${1}
 export SERVICE_ACCT=${2}
 
@@ -14,12 +20,6 @@ then
   echo "ERROR: NAMESPACE and SERVICE_ACCT are required."
   usage
 fi
-
-echo ""
-echo "Processing ${NAMESPACE}:${SERVICE_ACCT} ..."
-#OUTPUT_DIR=$(mktemp -d)
-#envsubst < rolebinding-workflow.yaml > ${OUTPUT_DIR}/rolebinding-workflow.yaml
-#echo "$(envsubst < rolebinding-workflow.yaml)"
 
 echo ""
 echo "===> Creating namespace ${NAMESPACE} (if it doesn't exist) ..."

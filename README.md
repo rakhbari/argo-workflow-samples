@@ -47,7 +47,7 @@ Although you can `kubectl apply` `Workflow` specs directly, I've found it easier
 I've included a copy of `http-hello-world` workflow for you try. We'll be submitting this workflow in the `namespace` we created earlier and telling the Argo CLI to use the service acct we created to do the work:
 
 ```
-argo submit workflow-http-hello-world-template.yaml -n app1 --serviceaccount user1
+argo submit workflow-http-hello-world.yaml -n app1 --serviceaccount user1
 ```
 
 Once you run this, you should see the Workflow run and complete successfully in the Argo Server UI (link above).

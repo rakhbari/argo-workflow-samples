@@ -15,6 +15,8 @@ The script `create-workflow-sa.sh` in the `scripts/` dir does the following thin
 1. Applies `rolebinding-workflow.yaml` in the given namespace substituting the namespace/service acct combo in the file.
 1. Creates a bearer token from the service acct's k8s secret and echos it to the console.
 
+__NOTE__: The script requires use of `envsubst` command. If you have an older Linux distro please do a search on how to get it installed on your machine before proceeding: https://www.google.com/search?q=bash+envsubst+command+not+found
+
 ```
 ./scripts/create-workflow-sa.sh <namespace> <service_acct>
 ```

@@ -28,7 +28,7 @@ Example:
 
 The output should end with something similar to this:
 ```
-===> ARGO_TOKEN for SA user2:
+===> ARGO_TOKEN for SA user1:
 Bearer eyJhbG....XcnUCw
 ```
 

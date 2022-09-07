@@ -1,39 +1,43 @@
+## Argo Server Authentication
+Below is a script put together from Argo Server's own docs: https://argoproj.github.io/argo-workflows/access-token/
+
+The script `create-workflow-sa.sh` in the `scripts/` dir does the following things:
+1. Creates the given namespace, if one doesn't exist
+1. Creates the given service acct, if one doesn't exist
+1. Applies `role-workflow.yaml` in the given namespace
+1. Applies `rolebinding-workflow.yaml` in the given namespace substituting the namespace/service acct combo in the file.
+1. Creates a bearer token from the service acct's k8s secret and echos it to the console.
+
+```
+./scripts/create-workflow-sa.sh <namespace> <service_acct>
+```
+Example:
+```
+./scripts/create-workflow-sa.sh app1 user1
+```
+
+The output should end with something similar to this:
+```
+===> ARGO_TOKEN for SA user2:
+Bearer eyJhbG....XcnUCw
+```
+
+Copy the output of `$ARGO_TOKEN` and paste it in the login UI token input box.
+
 ## Port-forwarding `argo-server` locally
 Argo Server UI should be running at ClusterIP port `2746`. Run following command to `port-forward` to it:
 ```
 kubectl -n argo port-forward deployment/argo-server 2746:2746
 ```
-Once done, you should be able to hit the Argo Server UI at: https://localhost:2746
+Once done, you should be able to hit the Argo Server UI at: https://localhost:2746/workflows/<namespace>
 
-## Argo Server Authentication
-Below is summaried from Argo Server's own docs: https://argoproj.github.io/argo-workflows/access-token/
+## Creating Workflows
+Although you can `kubectl apply` `Workflow` specs directly, I've found it easier to use the Argo CLI `argo submit` to do the same.
 
-```
-kubectl create sa ramin
-```
+I've included a copy of `http-hello-world` workflow for you try. We'll be submitting this workflow in the `namespace` we created earlier and telling the Argo CLI to use the service acct we created to do the work:
 
 ```
-kubectl create role ramin --verb=get,list,update,watch,create,patch,delete --resource=workflows.argoproj.io
+argo submit workflow-http-hello-world-template.yaml -n app1 --serviceaccount user1
 ```
 
-```
-kubectl create rolebinding ramin --role=ramin --serviceaccount=default:ramin
-```
-
-```
-SECRET=$(kubectl get sa ramin -o=jsonpath='{.secrets[0].name}')
-ARGO_TOKEN="Bearer $(kubectl get secret $SECRET -o=jsonpath='{.data.token}' | base64 --decode)"
-echo $ARGO_TOKEN
-```
-
-Copy the output of `$ARGO_TOKEN` and paste it in the login UI token input box.
-
-## Configure `Role` and `RoleBinding` for proper K8s RBAC
-```
-kubectl apply -f role.yaml -f rolebinding.yaml -n argo-samples
-```
-
-## Install/apply the `hello-world` Workflow
-```
-argo submit -n argo-samples --watch https://raw.githubusercontent.com/argoproj/argo-workflows/master/examples/hello-world.yaml
-```
+Once you run this, you should see the Workflow run and complete successfully in the Argo Server UI (link above).

@@ -1,13 +1,13 @@
 #!/bin/bash
 
+export NAMESPACE=${1}
+export SERVICE_ACCT=${2}
+
 if ! command -v envsubst &> /dev/null
 then
   echo "ERROR: envsubst isn't installed/can't be found. Get it installed on your machine before proceeding. https://www.google.com/search?q=envsubst+command+not+found"
   exit 2
 fi
-
-export NAMESPACE=${1}
-export SERVICE_ACCT=${2}
 
 usage() {
   echo ""
@@ -38,7 +38,5 @@ echo ""
 echo "===> Applying rolebinding-workflow.yaml in namespace ${NAMESPACE} ..."
 envsubst < rolebinding-workflow.yaml | kubectl apply -n ${NAMESPACE} -f -
 
-echo ""
-SECRET=$(kubectl get sa ${SERVICE_ACCT} -n ${NAMESPACE} -o=jsonpath='{.secrets[0].name}')
-ARGO_TOKEN="Bearer $(kubectl get secret $SECRET -n ${NAMESPACE} -o=jsonpath='{.data.token}' | base64 --decode)"
-printf "===> ARGO_TOKEN for SA ${SERVICE_ACCT}:\n${ARGO_TOKEN}\n"
+SCRIPT_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
+${SCRIPT_DIR}/get-sa-token.sh ${NAMESPACE} ${SERVICE_ACCT}

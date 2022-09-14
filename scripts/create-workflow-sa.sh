@@ -31,12 +31,14 @@ kubectl get sa ${SERVICE_ACCT} -n ${NAMESPACE} > /dev/null 2>&1
 test $? -eq 0 || kubectl create sa ${SERVICE_ACCT} -n ${NAMESPACE}
 
 echo ""
-echo "===> Applying role-workflow.yaml in namespace ${NAMESPACE} ..."
-kubectl apply -n ${NAMESPACE} -f role-workflow.yaml
+echo "===> Creating ClusterRoles (if they don't exist) ..."
+kubectl get clusterrole argo-secrets workflow-agent user-workflows workflows-executor workflow-pods > /dev/null 2>&1
+test $? -eq 0 || kubectl apply -f clusterrole-workflow-run.yaml -f clusterrole-workflow-ui.yaml
 
 echo ""
 echo "===> Applying rolebinding-workflow.yaml in namespace ${NAMESPACE} ..."
-envsubst < rolebinding-workflow.yaml | kubectl apply -n ${NAMESPACE} -f -
+envsubst < rolebinding-workflow-run.yaml | kubectl apply -n ${NAMESPACE} -f -
+envsubst < rolebinding-workflow-ui.yaml | kubectl apply -n ${NAMESPACE} -f -
 
 SCRIPT_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
 ${SCRIPT_DIR}/get-sa-token.sh ${NAMESPACE} ${SERVICE_ACCT}

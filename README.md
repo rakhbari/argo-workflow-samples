@@ -5,8 +5,15 @@ A proper quickstart for Argo Workflows which gives you all you need to run a sam
 We'll to with the default `Cluster` install of Argo Workflows as described in their own docs:
 https://argoproj.github.io/argo-workflows/installation/
 
-## Argo Server Authentication
-Below is a script put together from Argo Server's own docs: https://argoproj.github.io/argo-workflows/access-token/
+## Argo Server Authentication & Authorization (Authn/Authz)
+Authentication is handled by creating a `ServiceAccount` (SA) to run `Workflow` specs, and later retrieving its `Bearer` token for you to use to login to the Argo Server UI.
+
+Authorization part of K8s RBAC has been broken up into 2 sets of specs:
+
+* `clusterrole-workflow-run.yaml` & `rolebinding-workflow-run.yaml`: `ClusterRole`s and `RoleBinding`s needed for running/executing `Workflow` specs (ie: Using `argo submit ...` from the shell)
+* `clusterrole-workflow-ui.yaml` & `rolebinding-workflow-ui.yaml`: `ClusterRole`s and `RoleBinding`s required for viewing the `Workflow` runs in the Argo Server UI
+
+Below is a script put together from Argo Server's own docs: https://argoproj.github.io/argo-workflows/access-token/, which handles both the Authn and Authz explained above:
 
 The script `create-workflow-sa.sh` in the `scripts/` dir does the following things:
 1. Creates the given namespace, if one doesn't exist

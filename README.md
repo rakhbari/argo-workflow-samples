@@ -11,9 +11,9 @@ Below is a script put together from Argo Server's own docs: https://argoproj.git
 The script `create-workflow-sa.sh` in the `scripts/` dir does the following things:
 1. Creates the given namespace, if one doesn't exist
 1. Creates the given service acct, if one doesn't exist
-1. Applies `role-workflow.yaml` in the given namespace
-1. Applies `rolebinding-workflow.yaml` in the given namespace substituting the namespace/service acct combo in the file.
-1. Creates a bearer token from the service acct's k8s secret and echos it to the console.
+1. Creates the required `ClusterRole`s, if they don't exist
+1. Applies the needed `RoleBinding`s in the given namespace for the service acct
+1. Retrieves the bearer token from the service acct's k8s secret and echos it to the console.
 
 __NOTE__: The script requires use of `envsubst` command. If you have an older Linux distro please do a search on how to get it installed on your machine before proceeding: https://www.google.com/search?q=bash+envsubst+command+not+found
 

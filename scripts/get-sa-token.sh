@@ -16,7 +16,6 @@ then
 fi
 
 echo ""
-SECRET=$(kubectl get sa ${SERVICE_ACCT} -n ${NAMESPACE} -o=jsonpath='{.secrets[0].name}')
-ARGO_TOKEN="Bearer $(kubectl get secret $SECRET -n ${NAMESPACE} -o=jsonpath='{.data.token}' | base64 --decode)"
+ARGO_TOKEN="Bearer $(kubectl get secret ${SERVICE_ACCT}-token -n ${NAMESPACE} -o=jsonpath='{.data.token}' | base64 --decode)"
 printf "===> ARGO_TOKEN for SA ${NAMESPACE}:${SERVICE_ACCT}:\n${ARGO_TOKEN}\n"
 echo ""

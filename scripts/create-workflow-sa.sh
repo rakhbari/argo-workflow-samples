@@ -15,6 +15,13 @@ usage() {
   exit 1
 }
 
+createSA() {
+  echo ""
+  echo "===> Creating SA ${SERVICE_ACCT} in namespace ${NAMESPACE} ..."
+  kubectl create sa ${SERVICE_ACCT} -n ${NAMESPACE}
+  envsubst < secret-service-acct-token.yaml | kubectl apply -f -
+}
+
 if [ -z "${NAMESPACE}" ] || [ -z "${SERVICE_ACCT}" ]
 then
   echo "ERROR: NAMESPACE and SERVICE_ACCT are required."
@@ -25,20 +32,18 @@ echo ""
 echo "===> Creating namespace ${NAMESPACE} (if it doesn't exist) ..."
 kubectl get ns | grep -q "^${NAMESPACE} " || kubectl create ns ${NAMESPACE}
 
-echo ""
-echo "===> Creating SA ${SERVICE_ACCT} in namespace ${NAMESPACE} (if it doesn't exist) ..."
+# Check existence of SA in the namespace. If not, create it
 kubectl get sa ${SERVICE_ACCT} -n ${NAMESPACE} > /dev/null 2>&1
-test $? -eq 0 || kubectl create sa ${SERVICE_ACCT} -n ${NAMESPACE}
+test $? -eq 0 || createSA
 
 echo ""
 echo "===> Creating ClusterRoles (if they don't exist) ..."
-kubectl get clusterrole argo-secrets workflow-agent user-workflows workflows-executor workflow-pods > /dev/null 2>&1
-test $? -eq 0 || kubectl apply -f clusterrole-workflow-run.yaml -f clusterrole-workflow-ui.yaml
+kubectl get clusterrole argo-workflows-view argo-workflows-secrets argo-workflows-workflow argo-workflows-agent > /dev/null 2>&1
+test $? -eq 0 || kubectl apply -f clusterroles.yaml
 
 echo ""
 echo "===> Applying rolebinding-workflow.yaml in namespace ${NAMESPACE} ..."
-envsubst < rolebinding-workflow-run.yaml | kubectl apply -n ${NAMESPACE} -f -
-envsubst < rolebinding-workflow-ui.yaml | kubectl apply -n ${NAMESPACE} -f -
+envsubst < rolebindings.yaml | kubectl apply -n ${NAMESPACE} -f -
 
 SCRIPT_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
 ${SCRIPT_DIR}/get-sa-token.sh ${NAMESPACE} ${SERVICE_ACCT}

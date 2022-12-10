@@ -1,0 +1,84 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argo-workflows-view-${SERVICE_ACCT}
+  annotations:
+    workflows.argoproj.io/description: |
+      Minimum permissions needed for Argo Workflows to view Workflow details in Argo Server UI
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-workflows-view
+subjects:
+- kind: ServiceAccount
+  name: ${SERVICE_ACCT}
+  namespace: ${NAMESPACE}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argo-workflows-view-extras-${SERVICE_ACCT}
+  annotations:
+    workflows.argoproj.io/description: |
+      Permissions needed for viewing additional Argo Workflows objects in the Argo Server UI
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-workflows-view-extras
+subjects:
+- kind: ServiceAccount
+  name: ${SERVICE_ACCT}
+  namespace: ${NAMESPACE}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argo-workflows-secrets
+  annotations:
+    workflows.argoproj.io/description: |
+      Needed for Argo Workflows to run Workflow specs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-workflows-secrets
+subjects:
+- kind: ServiceAccount
+  name: argo-workflows-workflow-controller
+  namespace: argo
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argo-workflows-workflow-${SERVICE_ACCT}
+  annotations:
+    workflows.argoproj.io/description: |
+      Needed for Argo Workflows to run Workflow specs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-workflows-workflow
+subjects:
+- kind: ServiceAccount
+  name: ${SERVICE_ACCT}
+  namespace: ${NAMESPACE}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: workflow-agent-${SERVICE_ACCT}
+  annotations:
+    workflows.argoproj.io/description: |
+      Needed for Argo Workflows to run Workflow specs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-workflows-agent
+subjects:
+- kind: ServiceAccount
+  name: ${SERVICE_ACCT}
+  namespace: ${NAMESPACE}

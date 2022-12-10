@@ -17,7 +17,7 @@ Below is a script put together from Argo Server's own docs: https://argoproj.git
 
 The script `create-workflow-sa.sh` in the `scripts/` dir does the following things:
 1. Creates the given namespace, if one doesn't exist
-1. Creates the given service acct, if one doesn't exist
+1. Creates the given service acct and a token secret for it, if one doesn't exist
 1. Creates the required `ClusterRole`s, if they don't exist
 1. Applies the needed `RoleBinding`s in the given namespace for the service acct
 1. Calls `get-sa-token` script to retrieve the `Bearer` token for the newly create service acct and echos it to the console
@@ -51,10 +51,12 @@ Once done, you should be able to hit the Argo Server UI at: `https://localhost:2
 ## Creating Workflows
 Although you can `kubectl apply` `Workflow` specs directly, I've found it easier to use the Argo CLI `argo submit` to do the same.
 
-I've included a copy of `http-hello-world` workflow for you try. We'll be submitting this workflow in the `namespace` we created earlier and telling the Argo CLI to use the service acct we created to do the work:
+You can try out all example `Workflow` specs found in [Argo Workflow's own repo examples folder](https://github.com/argoproj/argo-workflows/tree/master/examples). We'll be submitting one of those example workflows in the `namespace` and using the service acct we created earlier:
+
+__NOTE__: The `--watch` arg displays a nice textual representation of the `Workflow`, in addition to what you see in the Argo Server UI
 
 ```
-argo submit workflow-http-hello-world.yaml -n app1 --serviceaccount user1
+argo submit -n app1 --serviceaccount user1 --watch https://raw.githubusercontent.com/argoproj/argo-workflows/master/examples/loops-dag.yaml
 ```
 
 Once you run this, you should see the Workflow run and complete successfully in the Argo Server UI (link above).

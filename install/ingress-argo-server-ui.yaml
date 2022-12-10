@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argo-server
+  namespace: argo
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`argo.akhbari.us`) || Host(`argo.lan`)
+      kind: Rule
+      services:
+        - name: argo-workflows-server
+          port: 2746
+  tls:
+    secretName: akhbari-us-production

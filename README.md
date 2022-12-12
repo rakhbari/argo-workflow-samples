@@ -13,7 +13,7 @@ $ helm repo update
 
 Install AWF in the `argo` namespace using our own `values.yaml` file:
 ```
-helm install argo-workflows argo/argo-workflows -n argo -f install/values.yaml
+helm install argo-workflows argo/argo-workflows -n argo -f install/workflows-values.yaml
 ```
 
 __NOTE__: The `values.yaml` file configures the Argo Server install with `--auth-mode=client`, which means the Argo Server UI wil require a `Bearer` token for login. You can read all about it in [Argo Server Auth Mode](https://argoproj.github.io/argo-workflows/argo-server-auth-mode/) doc. See the `AuthN/AuthZ` section below.

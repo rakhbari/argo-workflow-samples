@@ -90,19 +90,26 @@ metadata:
   name: argo-workflows-view-extras
 rules:
 - apiGroups:
-  - argoproj.io
+    - argoproj.io
   resources:
-  - eventsources
-  - sensors
+    - eventsources
+    - sensors
   verbs:
-  - get
-  - list
-  - watch
+    - get
+    - list
+    - watch
 - apiGroups:
-  - dataflow.argoproj.io
+    - argoproj.io
   resources:
-  - pipelines
+    - workflows
   verbs:
-  - get
-  - list
-  - watch
+    - patch
+    - delete
+- apiGroups:
+    - dataflow.argoproj.io
+  resources:
+    - pipelines
+  verbs:
+    - get
+    - list
+    - watch

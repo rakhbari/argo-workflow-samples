@@ -29,6 +29,7 @@ rules:
       - pods
     verbs:
       - get
+      - list
       - watch
       - patch
   - apiGroups:
@@ -37,6 +38,7 @@ rules:
       - pods/log
     verbs:
       - get
+      - list
       - watch
   - apiGroups:
       - ''

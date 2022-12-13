@@ -1,7 +1,7 @@
 # Argo Events
 
 ## Install
-We'll use the community maintained Helm to do the Argo Workflows install:
+We'll use the community maintained Helm to do the Argo Events install:
 https://github.com/argoproj/argo-helm/tree/main/charts/argo-events
 
 Add the chart repo & update it:

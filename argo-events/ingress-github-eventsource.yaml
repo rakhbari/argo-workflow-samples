@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ${EVENTSOURCE_NAME}-eventsource-svc
+  namespace: argo-events
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`${EVENTS_FQDN}`) || Host(`events.lan`)
+      kind: Rule
+      services:
+        - name: ${EVENTSOURCE_NAME}-eventsource-svc
+          port: 12000
+  tls:
+    secretName: ${TLS_CERT_SECRET_NAME}

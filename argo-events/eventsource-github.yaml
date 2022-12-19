@@ -9,7 +9,7 @@ spec:
         port: 12000
         targetPort: 12000
   github:
-    ${GITHUB_ORG}:
+    github-${GITHUB_ORG}:
       repositories:
         - owner: ${GITHUB_ORG}
           names:

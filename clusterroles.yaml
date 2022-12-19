@@ -105,6 +105,7 @@ rules:
   resources:
     - workflows
   verbs:
+    - create
     - patch
     - delete
 - apiGroups:

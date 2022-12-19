@@ -127,3 +127,14 @@ Get the name of the pod and tail (`-f`=follow) its logs:
 $ export EVENTSOURCE_POD=$(kubectl -n argo-events get pods --no-headers -o custom-columns=":metadata.name" | grep eventsource)
 $ kubectl logs -n argo-events -f ${EVENTSOURCE_POD}
 ```
+
+Go to one of the Github repos you defined in your `EventSource` spec (above), Settings -> Webhooks, click on the webhook URL whose endpoint is `/github`, then `Recent Deliveries` tab. You should see a sent request labeled `ping` that may or may not have succeeded. Click to open it and then click `Redeliver`. Once you do, watch your `EventSource` pod log output. You should see a few log lines appear ending with one that looks something like this:
+```
+{"level":"info","ts":1671379584.5103176,"logger":"argo-events.eventsource","caller":"eventsources/eventing.go:542","msg":"Succeeded to publish an event","eventSourceName":"github-<your-github-org>","eventName":"<your-github-org>","eventSourceType":"github","eventID":"36663139616337322d623562642d343039372d626561372d633530616538666662353362"}
+```
+
+If you see these log lines, your Github `EventSource` is properly configured and ready to publish incoming Github events to your `Sensor`s.
+
+## `Sensor`s
+Now that we're getting Github events published on our `EventBus`, it's time to set up a `Sensor` (or two) to take action(s) when those events arrive.
+

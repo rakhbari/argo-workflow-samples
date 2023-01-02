@@ -8,10 +8,10 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`argo.akhbari.us`) || Host(`argo.lan`)
+    - match: Host(`${ARGO_FQDN}`) || Host(`argo.lan`)
       kind: Rule
       services:
         - name: argo-workflows-server
           port: 2746
   tls:
-    secretName: akhbari-us-production
+    secretName: ${TLS_CERT_SECRET_NAME}

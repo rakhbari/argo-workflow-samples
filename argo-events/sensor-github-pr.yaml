@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor
 metadata:
-  name: github-${GITHUB_ORG}
+  name: github-${GITHUB_ORG}-pr
 spec:
   template:
     serviceAccountName: sensor-runner

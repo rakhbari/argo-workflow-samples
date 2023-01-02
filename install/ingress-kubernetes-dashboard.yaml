@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`${K8S_DASHBOARD_FQDN}`) || Host(`k8s.lan`)
+      kind: Rule
+      services:
+        - name: kubernetes-dashboard
+          port: 9090
+  tls:
+    secretName: ${TLS_CERT_SECRET_NAME}

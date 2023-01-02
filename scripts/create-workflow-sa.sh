@@ -43,7 +43,7 @@ test $? -eq 0 || kubectl apply -f clusterroles.yaml
 
 echo ""
 echo "===> Applying rolebinding-workflow.yaml in namespace ${NAMESPACE} ..."
-envsubst < rolebindings.yaml | kubectl apply -n ${NAMESPACE} -f -
+envsubst < rolebinding-workflow.yaml | kubectl apply -n ${NAMESPACE} -f -
 
 SCRIPT_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
 ${SCRIPT_DIR}/get-sa-token.sh ${NAMESPACE} ${SERVICE_ACCT}

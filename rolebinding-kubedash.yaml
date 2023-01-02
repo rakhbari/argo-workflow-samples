@@ -1,0 +1,44 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-dashboard-readonly-${SERVICE_ACCT}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubernetes-dashboard-readonly
+subjects:
+- kind: ServiceAccount
+  name: ${SERVICE_ACCT}
+  namespace: ${NAMESPACE}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-dashboard-extras-${SERVICE_ACCT}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-dash-extras
+subjects:
+- kind: ServiceAccount
+  name: ${SERVICE_ACCT}
+  namespace: ${NAMESPACE}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-dashboard-metrics-${SERVICE_ACCT}
+  labels:
+    app.kubernetes.io/instance: kubernetes-dashboard
+    app.kubernetes.io/name: kubernetes-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubernetes-dashboard-metrics
+subjects:
+- kind: ServiceAccount
+  name: ${SERVICE_ACCT}
+  namespace: ${NAMESPACE}

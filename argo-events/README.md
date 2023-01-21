@@ -84,7 +84,7 @@ ansible-vault encrypt --vault-pass-file ~/github-vault-pass argo-events/secret-g
 
 Decrypt the file and `apply` it to your cluster in the `argo-events` namespace:
 ```
-ansible-vault view --vault-pass-file ~/github-vault-pass argo-events/secret-github-access-rakhbari.yaml | k -n argo-events apply -f -
+ansible-vault view --vault-pass-file ~/github-vault-pass argo-events/secret-github-access-myorg.yaml | k -n argo-events apply -f -
 ```
 
 #### The `EventSource` object

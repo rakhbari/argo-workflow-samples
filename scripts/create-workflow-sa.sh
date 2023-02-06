@@ -18,7 +18,7 @@ usage() {
 createSA() {
   echo ""
   echo "===> Creating SA ${SERVICE_ACCT} in namespace ${NAMESPACE} ..."
-  kubectl create sa ${SERVICE_ACCT} -n ${NAMESPACE}
+  envsubst < service-acct.yaml | kubectl apply -f -
   envsubst < secret-service-acct-token.yaml | kubectl apply -f -
 }
 
